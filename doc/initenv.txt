@@ -1,0 +1,17 @@
+rem 添加java,ant的路径到系统环境变量中
+@echo off
+rem 添加环境变量PYTHONPATH
+echo 添加PYTHON环境变量
+set regpath=HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment
+set evname=PYTHONPATH
+set pythonpath=C:\python27
+reg add "%regpath%" /v %evname% /d %javapath% /f
+echo copy distutils.cfg to python 
+copy distutils.cfg %PYTHONPATH%\Lib\distutils
+rem 添加环境变量JAVA_HOME
+echo 添加java环境变量
+set regpath=HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment
+set evname=JAVA_HOME
+set javapath=C:\Program Files\Java\jdk1.7.0_17\bin
+reg add "%regpath%" /v %evname% /d %javapath% /f
+pause>nul

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<project basedir=".." default="run_tests" name="Automation test">
+	<taskdef resource="pyAntTasks.properties"/> 
+	<property name="src" value="${basedir}/src" />
+	<property name="dest" value="${basedir}/classes" />
+	<property name="testcases" value="${basedir}/testcases" />
+	<property name="mailzip" value="${basedir}/mailzip" />
+	<property name="out" value="${basedir}/reports" />
+	<path id="pythonpath">
+		<pathelement location="${basedir}" />
+		<pathelement location="${src}" />
+	</path>
+	<property environment="env" />
+	<property name="ANT_HOME" value="${env.ANT_HOME}"/>
+	<tstamp>
+		<format property="date" pattern="yyyy-MM-dd HH-mm" />
+	</tstamp>
+	<target name="init">
+		<delete includeEmptyDirs="true">
+			<fileset dir="log" includes="**/*.log" />
+			<fileset dir="reports" includes="**/*.html" />
+		</delete>
+		<delete dir="${dest}" />
+		<delete>
+			<fileset dir="." includes="**/*.pyc" />
+		</delete>
+		<mkdir dir="${dest}" />
+		<mkdir dir="${mailzip}" />
+	</target>
+	<target name="run_tests" depends="init">
+		<echo>running tests</echo>
+		<py-run script="${src}/runner/Runner.py" python="python"
+                 pythonpathref="pythonpath" >
+			<arg value="${testcases}/${testcase.filename}"/>
+    	</py-run>
+	</target>
+	<target name="sendmail"  >
+		<echo>send mail</echo>
+		<tstamp />
+		<mail messageMimeType="text/html" message="hello, water, pls check your mail" tolist="jun_1910310@163.com" mailhost="smtp.163.com" ssl="true" mailport="465" subject="automation test" 	from="jun_1910310@163.com" user="jun_1910310@163.com" password="ufo*911">
+		<fileset dir="${out}">
+			<include name="summary.html" />
+		</fileset>
+		</mail>
+	</target>
+	<target name="transfer-scp" depends="run_tests"> 
+	    <echo>${test}</echo>
+        <scp todir="root:root@ftp:/tmp/automation/reports" trust="true" > 
+             <fileset dir="reports"/> 
+        </scp>   
+	</target>  
+	<target name="run" depends="transfer-scp" />
+</project>

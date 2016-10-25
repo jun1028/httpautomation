@@ -1,0 +1,6 @@
+httplib
+httplib2
+xlrd
+poster
+pycurl
+redis

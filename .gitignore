@@ -1,0 +1,15 @@
+*.pyc
+*.pyo
+*.log
+*.html
+*.md
+*.tmp
+*.bak
+*.project
+*/reports/
+##########################
+bin/
+gen/
+.pydevproject
+.settings/
+

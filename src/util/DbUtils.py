@@ -7,12 +7,9 @@
 import MySQLdb
 from log.Log import Log
 
-DBHOST = 'localhost'
-DBUSER = 'root'
-DBPWD  = 'root'
-DBNAME = 'test1'
 
 class Singleton(object):  
+    
     ''''' A python style singleton '''  
     def __new__(cls, *args, **kw):  
         if not hasattr(cls, '_instance'):  
@@ -22,7 +19,17 @@ class Singleton(object):
     
 class db(Singleton):
     
-    def __init__(self, host=DBHOST, user=DBUSER, passwd=DBPWD, database=DBNAME, port=3306):
+    CONTYPE_MYSQL  = 0
+    CONTYPE_MSSQL  = 1
+    CONTYPE_ORCALE = 2
+    
+    DEFAULTHOST       = 'localhost'
+    DEFAULTUSER       = 'root'
+    DEFAULTPWD        = 'root'
+    DEFAULTDBNAME     = 'test1'
+    DEFAULTDBNAMEPORT = 3306
+    
+    def __init__(self, host=DEFAULTHOST, user=DEFAULTUSER, passwd=DEFAULTPWD, database=DEFAULTDBNAME, port=DEFAULTDBNAMEPORT):
         self.host = host
         self.user = user
         self.passwd = passwd
@@ -30,17 +37,26 @@ class db(Singleton):
         self.port = port
         self.conn = None
         self.cur = None
-
-    def con(self):   
-        try:
+    
+    def conToDb(self, conType = None):   
             if not self.conn:
-                self.conn = MySQLdb.connect(self.host, self.user, self.passwd, self.database, self.port, charset='utf8')
-                self.cur = self.conn.cursor()
+                if conType == self.CONTYPE_ORCALE:
+                    pass
+                elif conType == self.CONTYPE_MSSQL:
+                    pass
+                else:
+                    self.con2mysql()
+                
+    
+    def con2mysql(self):
+        try:
+            self.conn = MySQLdb.connect(self.host, self.user, self.passwd, self.database, self.port, charset='utf8')
+            self.cur = self.conn.cursor()
         except MySQLdb.Error,e:
             print "Mysql connect failed! Error %d: %s" % (e.args[0], e.args[1])
             Log.error("Mysql Error %d: %s" % (e.args[0], e.args[1]))
-
-    def execute(self,sql):
+            
+    def execute(self, sql):
         result = False
         try:
             result = self.cur.execute(sql)
@@ -86,7 +102,7 @@ class DataManagement():
         
 if __name__ == '__main__':
     db = db()
-    db.con()
+    db.conToDb()
     sql = "SELECT * FROM USERS"
     results  = db.query(sql)
     if results:

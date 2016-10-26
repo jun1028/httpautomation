@@ -6,7 +6,7 @@
 *.tmp
 *.bak
 *.project
-*/reports/
+*/reports/*
 ##########################
 bin/
 gen/

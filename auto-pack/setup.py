@@ -12,11 +12,14 @@ setup(
     packages=find_packages(exclude=["docs", "tests*", "log"]),
    
     install_requires=[
+        'pymssql',
+        'mysql',
         'httplib',
         'httplib2',
         'xlrd',
         'poster',
         'pycurl',
-        'redis'
+        'redis',
+        'cx_Oracle'
         ],
 )

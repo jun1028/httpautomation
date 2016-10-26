@@ -1,6 +1,9 @@
+pymssql
+mysql
 httplib
 httplib2
 xlrd
 poster
 pycurl
 redis
+cx_Oracle

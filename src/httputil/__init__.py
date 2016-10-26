@@ -60,6 +60,8 @@ class HttpClientUtil(object):
                         content_type=None, \
                         methodname='POST'):
         response = None
+        Log.debug(url)
+        Log.debug(args)
         if methodname.upper() == 'POST':
             response = self.httppost(url, args, content_type)
         elif methodname.upper() == 'GET':

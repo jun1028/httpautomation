@@ -55,7 +55,7 @@ class ActionFixture(Report):
                 case_no = self.url.split('=')[1]
             else:
                 self.url = self.basetestcaseurl + 'case_no=%s' % testcasepath
-                case_no = testcasepath
+                case_no =     testcasepath
             self.casenos = self.getTestcasesByUrl(self.url, case_no)
         for testcase in self.casenos:
             self.counts = Counts()

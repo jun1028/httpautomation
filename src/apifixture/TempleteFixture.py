@@ -49,22 +49,13 @@ class TempleteFixture(HttpApiFixture):
                 resp = self.client.dorequest(self.url, self.args, \
                                              methodname=self.requestMethod)
                 respData = resp.read()
-                self.status = resp.code
                 Log.debugvar('respData is ', respData)
             except HTTPError, e:
                 respData = '{"error":"' + str(e) + '"}'
             except Exception, e:
                 respData = '{"error":"' + str(e) + '"}'
-            fileName = str(self.testCaseId + 'json.txt')
-            self.saveRespDataToFile(fileName, respData)
-            self.jsonResult = strToDict(respData)
-            if self.jsonResult and 'data' in self.jsonResult:
-                if len(self.jsonResult['data']) > 0:
-                    divName = 'div' + self.testCaseId
-                    self.link =  "<p align='left' ><br><a href=javascript:show('" + divName + "');>show json text</a></p>"  + \
-                                    "<br><div id='" + divName + "' style='display:none;'>"+ respData + "</div>"
-            else:
-                self.link = "<i>the Data of Response is %s<i>" %  respData
+            self.saveRespDataToFile(respData)
+            self.genResultLink(respData)
         except BaseException, e:
             Log.error( e )
         Log.debug('end test: ' + self.clas)
@@ -113,7 +104,21 @@ class TempleteFixture(HttpApiFixture):
             Log.exception(e)
         Log.debug('end runTest: ' + self.clas)
     
-    def saveRespDataToFile(self, fileName, respData):
+    def genResultLink(self, respData):
+        try:
+            self.jsonResult = strToDict(respData)
+            if self.jsonResult and 'data' in self.jsonResult:
+                if len(self.jsonResult['data']) > 0:
+                    divName = 'div' + self.testCaseId
+                    self.link =  "<p align='left' ><br><a href=javascript:show('" + divName + "');>show json text</a></p>"  + \
+                                    "<br><div id='" + divName + "' style='display:none;'>"+ respData + "</div>"
+            else:
+                self.link = "<i>the Data of Response is %s<i>" %  respData
+        except:
+            self.link = "response data is %s " %  respData
+                
+    def saveRespDataToFile(self, respData):
+        fileName = str(self.testCaseId + 'json.txt')
         path = LOGFIELPATH + self.curShName
         if not os.path.exists(LOGFIELPATH):
             os.mkdir(LOGFIELPATH)

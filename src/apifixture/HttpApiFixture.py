@@ -97,13 +97,9 @@ class HttpApiFixture(ExcelColumnFixture, CommonFixture):
 
     # @return: function, rowpos
     def getAuth(self, rowpos, ncols):
-        auth = ''
-        for col in range(0, ncols):
-            auth = self.excelAPP.getCellStrValue(rowpos, col)
-            if len(auth) > 1 and auth.lower().find('auth') > -1:
-                auth = self.excelAPP.getCellStrValue(rowpos, col + 1)
-                rowpos += 1
-                break
+        auth = self.excelAPP.getCellStrValue(rowpos, 0)
+        if len(auth) > 1 and auth.lower().find('auth') > -1:
+            rowpos += 1
         return auth, rowpos
 
     def getPath(self, rowpos, ncols):
@@ -134,11 +130,12 @@ class HttpApiFixture(ExcelColumnFixture, CommonFixture):
         loginInfo = ''
         for col in range(0, ncols):
             loginMsg = self.excelAPP.getCellStrValue(rowpos, col)
-            if len(loginMsg) > 1 and loginMsg.lower().find('login') > -1:
-                loginFixtureName = self.excelAPP.getCellStrValue(rowpos, col + 1)
-                loginParams = self.excelAPP.getCellStrValue(rowpos, col + 2)
+            if len(loginMsg) > 1 and loginMsg.lower().find('loginfixture') > -1:
+                loginFixtureName = self.excelAPP.getCellStrValue(rowpos, col)
+                loginParams = self.excelAPP.getCellStrValue(rowpos, col + 1)
                 rowpos += 1
                 loginfixturepath = "fixture." + loginFixtureName
+                print loginfixturepath
                 try:
                     exec 'import ' + loginfixturepath
                     # test class method
@@ -146,6 +143,7 @@ class HttpApiFixture(ExcelColumnFixture, CommonFixture):
                     loginInfo = loginfixture.login(loginParams)
                 except BaseException, e:
                     Log.error(e)
+                    print e
                 break
         Log.debug('loginInfo', loginInfo)
         return loginInfo, rowpos

@@ -87,16 +87,32 @@ class ResultCheck(object):
     def verfyStrResult(actualResultStr, expectResult):
         bCmpResult = -1
         message    = '' 
-        matchResult = re.findall(expectResult, actualResultStr, re.IGNORECASE)
-        if matchResult:
-            bCmpResult = 1
-            message    = matchResult
-        else:
-            bCmpResult = 0 
-            message    = actualResultStr
+        expectResults = expectResult.split(';')
+        for expectReStr in expectResults:
+            matchResult = re.findall(expectReStr, actualResultStr, re.IGNORECASE)
+            if matchResult:
+                bCmpResult = 1
+                message    += ';' + ResultCheck.list2str(matchResult)
+            else:
+                bCmpResult = 0 
+                message    = actualResultStr
         return bCmpResult, message
+    
+    @staticmethod
+    def assertnotnull(actualResultStr):
+        matchResult = re.findall('null', actualResultStr, re.IGNORECASE)
+        if matchResult:
+            return False
+        else:
+            return True
         
-        
+    @staticmethod
+    def list2str(lists=[]):
+        strvalues = ''
+        for listvalue in lists:
+            strvalues += listvalue
+        return strvalues
+    
     @staticmethod
     def checkResult(actualResult, expectResult):
         bCmpResult, message = -1, "only output"
@@ -109,7 +125,6 @@ class ResultCheck(object):
                 bCmpResult, message = 1, str(expectResultDict)
             else:
                 bCmpResult, message = ResultCheck.verfyStrResult(actualResult, str(expectResultDict))
-                #bCmpResult, message = self.PartOutValue(actualResult, expectResultDict)
         else: #正则
             bCmpResult, message = ResultCheck.verfyStrResult(actualResult, expectResult)
 #         message = unicode(message, "gb2312")

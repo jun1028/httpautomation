@@ -39,12 +39,12 @@ class TempleteFixture(HttpApiFixture):
             self.addPreResultToParams()
             self.addParams(paramlist)
             Log.debug('testCaseId:', self.testCaseId)
+            respData = ''
             try:
                 #默认为post请求
                 if not hasattr(self, 'requestMethod') and not self.requestMethod:
                     self.requestMethodself = 'post'
                 self.setDynamicUrlPath()
-                respData = ''
                 #开始HTTP请求
                 resp = self.client.dorequest(self.url, self.args, \
                                              methodname=self.requestMethod)

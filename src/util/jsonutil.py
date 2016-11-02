@@ -18,6 +18,7 @@ def strToDict(data):
             data = temp.sub(':True',data)
             result = eval(data)
         except BaseException, e:
+            Log.debug(data)
             Log.debug("strToDict exception",  e)
         return result
     

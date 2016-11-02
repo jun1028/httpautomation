@@ -145,6 +145,9 @@ class ExcelColumnFixture(Report):
         Log.debug('start: ExcelColumnFixture.doRows')
         self.title, rowpos = self.getTitle(rowpos, ncols)
         rowpos = self.processHeads(rowpos, ncols)
+        #setup before test
+        if hasattr(self, 'runSetupFixture'):
+            self.runSetupFixture()
         self.repstr = self.getReportHeader(self.curShName, needscrips=True)
         self.failrepstr = self.getReportHeader(self.curShName, needscrips=True)
         self.repstr += self.getReportTableHeader()

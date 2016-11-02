@@ -3,7 +3,7 @@
 '''
 from httputil import HttpClientUtil
 from log.Log import Log
-from util import strToDict
+from util.jsonutil import strToDict
 
 
 class LoginFixture(object):
@@ -22,33 +22,22 @@ class LoginFixture(object):
     #   sample     params = {'url':url, 'username':username,'pwd':pwd}
     #@return type:dict key: "ut"
     #   sample     loginResult = {"ut":ut}
-    def login(self, params):
-        result = ''
+    def run(self, params):
+        jsonResult = {}
         if type(params) == str or type(params) == unicode:
-            print params
             params = strToDict(params)
             if 'url' in params:
-                url = params.pop('url')
-                if 'needreturnkey' in params:
-                    needreturnkey = params.pop('needreturnkey')
-                else:
-                    needreturnkey = self.defaultneedreturnkey
-                url = 'http://' + url
-                print url
+                url = 'http://'  + params.pop('url')
                 resp = self.client.dorequest(url, params, \
                                                  methodname='post')
                 respdata = resp.read()
-                print respdata
                 jsonResult = strToDict(respdata)
-                if jsonResult and needreturnkey in jsonResult:
-                    result = jsonResult[needreturnkey]
-        return result
+        return jsonResult
     
     def getToken(self, jsonResult):
+        tokenvalue = ''
         if jsonResult and 'data' in jsonResult:
             data = jsonResult["data"]
-            token = data["token"]
-            Log.debug("token is ",  token)
-            return token
-        else:
-            return None
+            tokenvalue = data["token"]
+            Log.debug("token is ",  tokenvalue)
+        return tokenvalue

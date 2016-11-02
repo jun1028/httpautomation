@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
-<project basedir=".." default="run_tests" name="Automation test">
+<project basedir=".." default="sendmail" name="Automation test">
 	<taskdef resource="pyAntTasks.properties"/> 
 	<property name="src" value="${basedir}/src" />
 	<property name="dest" value="${basedir}/classes" />
@@ -19,6 +19,7 @@
 		<delete includeEmptyDirs="true">
 			<fileset dir="log" includes="**/*.log" />
 			<fileset dir="reports" includes="**/*.html" />
+			<fileset dir="${mailzip}" includes="**/*.zip" />
 		</delete>
 		<delete dir="${dest}" />
 		<delete>
@@ -34,12 +35,22 @@
 			<arg value="${testcases}/${testcase.filename}"/>
     	</py-run>
 	</target>
-	<target name="sendmail"  >
+	<tstamp>
+		<format property="date" pattern="yyyy-MM-dd HH-mm" />
+	</tstamp>
+	<target name="make_data_zip" depends="run_tests">
+		<echo>make mail zip</echo>
+		<jar jarfile="${mailzip}/report${date}.zip" basedir="${out}"  />
+	</target>
+	<target name="sendmail"  depends="make_data_zip">
 		<echo>send mail</echo>
 		<tstamp />
-		<mail messageMimeType="text/html" message="hello, water, pls check your mail" tolist="jun_1910310@163.com" mailhost="smtp.163.com" ssl="true" mailport="465" subject="automation test" 	from="jun_1910310@163.com" user="jun_1910310@163.com" password="ufo*911">
+		<mail messageMimeType="text/html" message="hello, water, pls check your mail" tolist="jun_1910310@163.com,zzj@moojnn.com" mailhost="smtp.163.com" ssl="true" mailport="465" subject="automation test" 	from="jun_1910310@163.com" user="jun_1910310@163.com" password="ufo*911">
 		<fileset dir="${out}">
 			<include name="summary.html" />
+		</fileset>
+		<fileset dir="${mailzip}">
+				<include name="*.zip" />
 		</fileset>
 		</mail>
 	</target>

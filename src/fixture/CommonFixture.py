@@ -116,3 +116,16 @@ class CommonFixture(object):
             except BaseException, e:
                 Log.error(e)
         return result
+    
+    def runSetupFixture(self):
+        if self.setupFixture:
+            fixturePath = self.setupFixture[0]
+            fixtureParams = self.setupFixture[1]
+            clas = fixturePath.split('.')[-1]
+            try:
+                exec 'import ' + clas
+                exec 'fixture = ' + fixturePath + '.' + clas + '()' 
+                self.initBeforeTest = fixture.run(fixtureParams)
+            except BaseException, e:
+                Log.error(e)
+                print e

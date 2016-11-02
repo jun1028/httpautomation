@@ -44,6 +44,10 @@ class TempleteFixture(HttpApiFixture):
                 #默认为post请求
                 if not hasattr(self, 'requestMethod') and not self.requestMethod:
                     self.requestMethodself = 'post'
+                if 'filepath' in self.args:
+                    self.requestMethodself = 'upload'
+                    filepath = self.args['filepath']
+                    self.args = filepath
                 self.setDynamicUrlPath()
                 #开始HTTP请求
                 resp = self.client.dorequest(self.url, self.args, \

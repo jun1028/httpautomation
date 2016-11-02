@@ -5,18 +5,20 @@
 @author: Water.Zhang
 '''
 import StringIO
+import cookielib
 import gzip
 import json
 import re
 import sys
 import urllib
 import urllib2
+import httplib
 
 from log.Log import Log
-
+from poster.encode import multipart_encode
+from poster.streaminghttp import register_openers
 
 try:
-    import httplib
     import httplib2
 except:
     print 'please install httplib2'
@@ -32,7 +34,7 @@ def callbackfunc(blocknum, blocksize, totalsize):
     if percent > 100:
         percent = 100
         print 'totalsize:', totalsize
-    #print "%.2f%%"% percent
+    return "%.2f%%"% percent
 
 
 def download(url, filename):
@@ -50,22 +52,37 @@ def download(url, filename):
 class HttpClientUtil(object):
     
     _clas = 'httputil.HttpClientUtil'
+    headerinfo = ''
 
     def __init__(self):
         self.headers = {}
+        #cookies
         self.cookie = ''
-        self.opener = urllib2.build_opener(urllib2.HTTPCookieProcessor())
-        
+        self.cookies = urllib2.HTTPCookieProcessor()
+        self.opener  = urllib2.build_opener(self.cookies)
+    
+    #调用前，需要设定header
+    def dorequest1(self, url, args=None, \
+                        methodname='POST'):
+        response = None
+        if methodname.upper() == 'POST':
+            response = self.httppost(url, args)
+        elif methodname.upper() == 'GET':
+            response = self.get(url, args)
+        else:
+            print 'does not implement!'
+        return response  
+    
     def dorequest(self, url, args=None, \
                         content_type=None, \
                         methodname='POST'):
         response = None
-        Log.debug(url)
-        Log.debug(args)
         if methodname.upper() == 'POST':
             response = self.httppost(url, args, content_type)
         elif methodname.upper() == 'GET':
             response = self.get(url, args, content_type)
+        elif methodname.upper() == 'UPLOAD':
+            response = self.uploadfile(url, args)
         else:
             print 'does not implement!'
         return response
@@ -73,23 +90,30 @@ class HttpClientUtil(object):
     def httppost(self, url, args=None, content_type=None):
         params = urllib.urlencode(args)
         req = urllib2.Request(url, params)
+        if self.headers:
+            req = self.setReqHeader(req, self.headers)
         if content_type:
             req.add_header('Content-Type', content_type)
-        response = urllib2.urlopen(req)
+        response = self.opener.open(req)
         self.response = response
         return self.response
 
-    def get(self, url, args=None, content_type=None):
+    def get(self, url, args=None, content_type=None, headers=None):
+        params = ''
         Log.debug('start get' + self._clas)
         if args and not isinstance(args, dict):
             args = self.strToDict(args)
-        params = urllib.urlencode(args)
-        url = url + '?' + params
+        if args:
+            params = urllib.urlencode(args)
+        if params:
+            url = url + '?' + params
         Log.debug(url)
         req = urllib2.Request(url)
+        if self.headers:
+            req = self.setReqHeader(req, self.headers)
         if content_type:
             req.add_header('Content-Type', content_type)
-        response = urllib2.urlopen(req)
+        response = self.opener.open(req)
         self.response = response
         Log.debug('start end' + self._clas)
         return self.response
@@ -112,12 +136,13 @@ class HttpClientUtil(object):
         opener = urllib2.build_opener(handler)
         urllib2.install_opener(opener)
         feedbackParams = urllib.urlencode(args)
+#        req = urllib2.Request(url)
+#         print url + str(feedbackParams)
         response = urllib2.urlopen(url + str(feedbackParams))
         return response
 
-    def do(self, url, args, content_type='application/json', methodname='POST'):
+    def do(self, url, args, methodname='POST'):
         http = httplib2.Http()
-        self.headers = {'Content-type': content_type}
         if hasattr(self, 'cookie') and len(self.cookie) > 1:
             self.headers['Cookie'] = self.cookie
         if isinstance(args, dict):
@@ -134,23 +159,40 @@ class HttpClientUtil(object):
                                 headers=self.headers, body=body)
         return response
 
-    def put(self, url, args, content_type=None):
-        if content_type:
-            return self.do(url, args, content_type, methodname='put')
-        else:
-            return self.do(url, args, methodname='put')
+    def put(self, url, args):
+        return self.do(url, args, methodname='put')
 
     def delete(self, url, args, content_type=None):
-        if content_type:
-            return self.do(url, args, content_type, methodname='delete')
-        else:
-            return self.do(url, args, methodname='delete')
+        return self.do(url, args, methodname='delete')
 
-    def post(self, url, args, content_type=None):
-        if content_type:
-            return self.do(url, args, content_type)
-        else:
-            return self.do(url, args)
+    def post(self, url, args):
+        return self.do(url, args, methodname='post')
+        
+    def setReqHeader(self, request, headers):
+        for header in headers:
+            request.add_header(header, headers[header])
+        return request
+    
+    def proceHeadInfo(self, info):
+        try:
+            if info and 'Set-Cookie' in info:
+                self.headerinfo = info
+                self.cookie = info['Set-Cookie']
+        except:
+            Log.debug('proceHeadInfo error') 
+        
+    def uploadfile(self, url, filepath):
+        register_openers()
+        fi = open(filepath, "rb")
+        datagen, headers = multipart_encode({'file': fi})
+        request = urllib2.Request(url, datagen, headers)
+        if self.cookie:
+            self.headers['Cookie'] = self.cookie
+        if self.headers:
+            request = self.setReqHeader(request, self.headers)
+        response = urllib2.urlopen(request)
+        #response = self.opener.open(request)
+        return response
 
     def postAndCooks(self, url, args, content_type=None):
         argDict = self.strToDict(args) 

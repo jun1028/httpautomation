@@ -36,18 +36,21 @@ class TempleteFixture(HttpApiFixture):
             #self.fixtureExecResult = self.getFixture()
             self.args = {}
             paramlist = self.getParamlist()
-            self.addPreResultToParams()
             self.addParams(paramlist)
+            self.addLoginToParams()
+            self.addPreResultToParams() #从上次请求产生的response中取得需要保存的参数信息，并保存到本次请求的参数列表中
             Log.debug('testCaseId:', self.testCaseId)
             respData = ''
             try:
                 #默认为post请求
                 if not hasattr(self, 'requestMethod') and not self.requestMethod:
-                    self.requestMethodself = 'post'
+                    self.requestMethod = 'post'
+                print self.args
                 if 'filepath' in self.args:
                     self.requestMethodself = 'upload'
                     filepath = self.args['filepath']
                     self.args = filepath
+                #若果请求的路径信息中含有动态变量，则从参数列表中读取
                 self.setDynamicUrlPath()
                 #开始HTTP请求
                 resp = self.client.dorequest(self.url, self.args, \
@@ -157,12 +160,14 @@ class TempleteFixture(HttpApiFixture):
         except Exception, e:
             Log.error(e)
         Log.debug('end setDynamicUrlPath: ' + self.clas)
-
+    
+    #需要重新编写,去掉不做请求的参数
     def getParamlist(self):
         Log.debug('start getParamlist: ' + self.clas)
         paramList = []
         for param in self._typeDict:
-            if param.lower().find('test') > -1:
+            if param.lower().find('test') > -1 or param.lower().find('url') > -1 \
+                or param.lower().find('savepre') > -1:
                 continue
             paramList.append(param)
         return paramList

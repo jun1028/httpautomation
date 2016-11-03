@@ -1,229 +1,58 @@
-2016-11-02 11:00:27,052 DEBUG start: ExcelTestDriver.runTest
-2016-11-02 11:00:27,098 DEBUG start: ExcelColumnFixture.dosheets
-2016-11-02 11:00:27,099 DEBUG start: ExcelColumnFixture.doSheet
-2016-11-02 11:00:27,273 DEBUG start: ExcelColumnFixture.doRows
-2016-11-02 11:00:27,273 DEBUG start processHeads: apifixture.TempleteFixture
-2016-11-02 11:00:27,273 DEBUG content_type rowpos: 5
-2016-11-02 11:00:27,273 DEBUG auth rowpos: 5
-2016-11-02 11:00:27,273 DEBUG argCounts rowpos: 5
-2016-11-02 11:00:27,273 DEBUG beforeTest rowpos: 5
-2016-11-02 11:00:27,273 DEBUG note rowpos: 6
-2016-11-02 11:00:27,273 DEBUG end processHeads: apifixture.TempleteFixture
-2016-11-02 11:00:27,273 DEBUG content:  application/json
-2016-11-02 11:00:27,273 ERROR runSetupFixture ERROR:,invalid syntax (<string>, line 1)
-2016-11-02 11:00:27,273 DEBUG start getHeads: apifixture.TempleteFixture
-2016-11-02 11:00:27,273 DEBUG end getHeads: apifixture.TempleteFixture
-2016-11-02 11:00:27,273 DEBUG start getHeads: apifixture.TempleteFixture
-2016-11-02 11:00:27,273 DEBUG heads: [u'testCaseId', u'username', u'password', u'needSavePreResults', 'test()']
-2016-11-02 11:00:27,275 DEBUG start: ExcelColumnFixture.doCells
-2016-11-02 11:00:27,275 DEBUG start: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,275 DEBUG end: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,275 DEBUG start: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,275 DEBUG end: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,275 DEBUG start: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,275 DEBUG end: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,275 DEBUG start: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,275 DEBUG end: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,275 DEBUG start: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,275 DEBUG start: ExcelColumnFixture.check
-2016-11-02 11:00:27,276 DEBUG start runTest: apifixture.TempleteFixture
-2016-11-02 11:00:27,276 DEBUG start test: apifixture.TempleteFixture
-2016-11-02 11:00:27,276 DEBUG start getParamlist: apifixture.TempleteFixture
-2016-11-02 11:00:27,276 DEBUG testCaseId: 1
-2016-11-02 11:00:27,276 DEBUG start setDynamicUrlPath: apifixture.TempleteFixture
-2016-11-02 11:00:27,276 DEBUG end setDynamicUrlPath: apifixture.TempleteFixture
-2016-11-02 11:00:27,276 DEBUG http://www.moojnn.com/mojingcsp/authentication
-2016-11-02 11:00:27,276 DEBUG {u'username': '18352513345', u'needSavePreResults': '{"token":"*\\w+"}', u'password': 'e10adc3949ba59abbe56e057f20f883e'}
-2016-11-02 11:00:27,582 DEBUG respData is {"code":"20000","message":"success","data":{"id":95738,"email":"535867863@qq.com","expireDate":null,"fromType":8,"gmtCreate":1465305333000,"gmtModified":1465895542000,"isActive":1,"lastLogin":1478055554000,"mobile":"18352513345","name":"","registDate":1465305333000,"serverId":0,"serverPw":"","serverName":"","utype":1,"guideFlag":null,"fillFlag":null,"token":"56dd0fa7331e4ad7bbd4954adaca4947","type":5,"url":"http://pro.moojnn.com/","imageServer":null}}
-2016-11-02 11:00:27,584 DEBUG end test: apifixture.TempleteFixture
-2016-11-02 11:00:27,584 DEBUG start savePreResultInfo: apifixture.TempleteFixture
-2016-11-02 11:00:27,584 DEBUG start savePreResultInfo: {"code":"20000","message":"success","data":{"id":95738,"email":"535867863@qq.com","expireDate":null,"fromType":8,"gmtCreate":1465305333000,"gmtModified":1465895542000,"isActive":1,"lastLogin":1478055554000,"mobile":"18352513345","name":"","registDate":1465305333000,"serverId":0,"serverPw":"","serverName":"","utype":1,"guideFlag":null,"fillFlag":null,"token":"56dd0fa7331e4ad7bbd4954adaca4947","type":5,"url":"http://pro.moojnn.com/","imageServer":null}}
-2016-11-02 11:00:27,585 DEBUG respDict:  {'message': 'success', 'code': '20000', 'data': {'fillFlag': 'empty', 'expireDate': 'empty', 'registDate': 1465305333000L, 'name': '', 'mobile': '18352513345', 'gmtCreate': 1465305333000L, 'serverName': '', 'guideFlag': 'empty', 'email': '535867863@qq.com', 'fromType': 8, 'utype': 1, 'token': '56dd0fa7331e4ad7bbd4954adaca4947', 'serverPw': '', 'lastLogin': 1478055554000L, 'serverId': 0, 'url': 'http://pro.moojnn.com/', 'gmtModified': 1465895542000L, 'type': 5, 'id': 95738, 'isActive': 1, 'imageServer': 'empty'}}
-2016-11-02 11:00:27,585 DEBUG needSavePreResults:  {"token":"*\w+"}
-2016-11-02 11:00:27,585 DEBUG needSavePreResultDict:  {'token': '*\\w+'}
-2016-11-02 11:00:27,585 ERROR nothing to repeat,
-2016-11-02 11:00:27,585 DEBUG end savePreResultInfo: apifixture.TempleteFixture
-2016-11-02 11:00:27,585 DEBUG preResultInfo
-2016-11-02 11:00:27,585 DEBUG end runTest: apifixture.TempleteFixture
-2016-11-02 11:00:27,585 DEBUG end: ExcelColumnFixture.check
-2016-11-02 11:00:27,585 DEBUG end: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,585 DEBUG end: ExcelColumnFixture.doCells
-2016-11-02 11:00:27,585 DEBUG start: ExcelColumnFixture.doCells
-2016-11-02 11:00:27,585 DEBUG start: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,586 DEBUG end: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,586 DEBUG start: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,586 DEBUG end: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,586 DEBUG start: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,586 DEBUG end: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,586 DEBUG start: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,586 DEBUG end: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,586 DEBUG start: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,586 DEBUG start: ExcelColumnFixture.check
-2016-11-02 11:00:27,586 DEBUG start runTest: apifixture.TempleteFixture
-2016-11-02 11:00:27,588 DEBUG start test: apifixture.TempleteFixture
-2016-11-02 11:00:27,588 DEBUG start getParamlist: apifixture.TempleteFixture
-2016-11-02 11:00:27,588 DEBUG testCaseId: 2
-2016-11-02 11:00:27,588 DEBUG start setDynamicUrlPath: apifixture.TempleteFixture
-2016-11-02 11:00:27,588 DEBUG end setDynamicUrlPath: apifixture.TempleteFixture
-2016-11-02 11:00:27,588 DEBUG http://www.moojnn.com/mojingcsp/authentication
-2016-11-02 11:00:27,588 DEBUG {u'username': '18352513345', u'password': 'e10adc3949ba59abbe56e057f20f8'}
-2016-11-02 11:00:27,802 DEBUG respData is {"code":"40001","message":"username or password is invalid","data":{"show_captcha":false},"desc":""}
-2016-11-02 11:00:27,805 DEBUG end test: apifixture.TempleteFixture
-2016-11-02 11:00:27,805 DEBUG preResultInfo
-2016-11-02 11:00:27,805 DEBUG end runTest: apifixture.TempleteFixture
-2016-11-02 11:00:27,805 DEBUG end: ExcelColumnFixture.check
-2016-11-02 11:00:27,805 DEBUG end: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,805 DEBUG end: ExcelColumnFixture.doCells
-2016-11-02 11:00:27,805 DEBUG start genHtmlfile: apifixture.TempleteFixture
-2016-11-02 11:00:27,806 DEBUG end genHtmlfile: apifixture.TempleteFixture
-2016-11-02 11:00:27,806 DEBUG start genHtmlfile: apifixture.TempleteFixture
-2016-11-02 11:00:27,808 DEBUG end genHtmlfile: apifixture.TempleteFixture
-2016-11-02 11:00:27,808 DEBUG end: ExcelColumnFixture.doRows
-2016-11-02 11:00:27,808 DEBUG end: ExcelColumnFixture.doSheet
-2016-11-02 11:00:27,808 DEBUG start: ExcelColumnFixture.doSheet
-2016-11-02 11:00:27,809 DEBUG start: ExcelColumnFixture.doRows
-2016-11-02 11:00:27,809 DEBUG start processHeads: apifixture.TempleteFixture
-2016-11-02 11:00:27,809 DEBUG content_type rowpos: 5
-2016-11-02 11:00:27,809 DEBUG auth rowpos: 5
-2016-11-02 11:00:27,809 DEBUG argCounts rowpos: 5
-2016-11-02 11:00:27,809 DEBUG beforeTest rowpos: 5
-2016-11-02 11:00:27,809 DEBUG note rowpos: 6
-2016-11-02 11:00:27,809 DEBUG end processHeads: apifixture.TempleteFixture
-2016-11-02 11:00:27,811 DEBUG content:  application/json
-2016-11-02 11:00:27,811 ERROR runSetupFixture ERROR:,invalid syntax (<string>, line 1)
-2016-11-02 11:00:27,811 DEBUG start getHeads: apifixture.TempleteFixture
-2016-11-02 11:00:27,811 DEBUG end getHeads: apifixture.TempleteFixture
-2016-11-02 11:00:27,812 DEBUG start getHeads: apifixture.TempleteFixture
-2016-11-02 11:00:27,812 DEBUG heads: [u'testCaseId', u'email', u'roleIds', u'projectId', 'test()']
-2016-11-02 11:00:27,812 DEBUG start: ExcelColumnFixture.doCells
-2016-11-02 11:00:27,812 DEBUG start: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,812 DEBUG end: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,812 DEBUG start: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,812 DEBUG end: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,813 DEBUG start: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,813 DEBUG end: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,813 DEBUG start: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,813 DEBUG end: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,813 DEBUG start: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,813 DEBUG start: ExcelColumnFixture.check
-2016-11-02 11:00:27,815 DEBUG start runTest: apifixture.TempleteFixture
-2016-11-02 11:00:27,815 DEBUG start test: apifixture.TempleteFixture
-2016-11-02 11:00:27,815 DEBUG start getParamlist: apifixture.TempleteFixture
-2016-11-02 11:00:27,815 DEBUG testCaseId: 1
-2016-11-02 11:00:27,815 DEBUG start setDynamicUrlPath: apifixture.TempleteFixture
-2016-11-02 11:00:27,815 DEBUG end setDynamicUrlPath: apifixture.TempleteFixture
-2016-11-02 11:00:27,815 DEBUG http://192.168.1.188:8000/mojing-server/grant/roleemail
-2016-11-02 11:00:27,815 DEBUG {u'projectId': '999', u'email': 'zzj@data-god.com', u'roleIds': '[101]'}
-2016-11-02 11:00:27,829 DEBUG end test: apifixture.TempleteFixture
-2016-11-02 11:00:27,829 DEBUG preResultInfo
-2016-11-02 11:00:27,831 DEBUG end runTest: apifixture.TempleteFixture
-2016-11-02 11:00:27,831 DEBUG end: ExcelColumnFixture.check
-2016-11-02 11:00:27,831 DEBUG end: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,831 DEBUG end: ExcelColumnFixture.doCells
-2016-11-02 11:00:27,832 DEBUG start: ExcelColumnFixture.doCells
-2016-11-02 11:00:27,832 DEBUG start: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,832 DEBUG end: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,832 DEBUG start: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,832 DEBUG end: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,832 DEBUG start: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,832 DEBUG end: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,832 DEBUG start: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,832 DEBUG end: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,834 DEBUG start: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,834 DEBUG start: ExcelColumnFixture.check
-2016-11-02 11:00:27,834 DEBUG start runTest: apifixture.TempleteFixture
-2016-11-02 11:00:27,834 DEBUG start test: apifixture.TempleteFixture
-2016-11-02 11:00:27,834 DEBUG start getParamlist: apifixture.TempleteFixture
-2016-11-02 11:00:27,835 DEBUG testCaseId: 2
-2016-11-02 11:00:27,835 DEBUG start setDynamicUrlPath: apifixture.TempleteFixture
-2016-11-02 11:00:27,835 DEBUG end setDynamicUrlPath: apifixture.TempleteFixture
-2016-11-02 11:00:27,835 DEBUG http://192.168.1.188:8000/mojing-server/grant/roleemail
-2016-11-02 11:00:27,835 DEBUG {u'projectId': '10000', u'email': 'zzj@data-god.com', u'roleIds': '101'}
-2016-11-02 11:00:27,851 DEBUG end test: apifixture.TempleteFixture
-2016-11-02 11:00:27,851 DEBUG preResultInfo
-2016-11-02 11:00:27,851 DEBUG end runTest: apifixture.TempleteFixture
-2016-11-02 11:00:27,851 DEBUG end: ExcelColumnFixture.check
-2016-11-02 11:00:27,851 DEBUG end: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,852 DEBUG end: ExcelColumnFixture.doCells
-2016-11-02 11:00:27,852 DEBUG start genHtmlfile: apifixture.TempleteFixture
-2016-11-02 11:00:27,854 DEBUG end genHtmlfile: apifixture.TempleteFixture
-2016-11-02 11:00:27,854 DEBUG start genHtmlfile: apifixture.TempleteFixture
-2016-11-02 11:00:27,855 DEBUG end genHtmlfile: apifixture.TempleteFixture
-2016-11-02 11:00:27,855 DEBUG end: ExcelColumnFixture.doRows
-2016-11-02 11:00:27,855 DEBUG end: ExcelColumnFixture.doSheet
-2016-11-02 11:00:27,855 DEBUG start: ExcelColumnFixture.doSheet
-2016-11-02 11:00:27,857 DEBUG start: ExcelColumnFixture.doRows
-2016-11-02 11:00:27,857 DEBUG start processHeads: apifixture.TempleteFixture
-2016-11-02 11:00:27,857 DEBUG content_type rowpos: 5
-2016-11-02 11:00:27,857 DEBUG auth rowpos: 5
-2016-11-02 11:00:27,858 DEBUG argCounts rowpos: 5
-2016-11-02 11:00:27,858 DEBUG beforeTest rowpos: 6
-2016-11-02 11:00:27,858 DEBUG note rowpos: 7
-2016-11-02 11:00:27,858 DEBUG end processHeads: apifixture.TempleteFixture
-2016-11-02 11:00:27,858 DEBUG content:  application/json
-2016-11-02 11:00:27,871 DEBUG {"url":url,"username":"","pwd":pwd}
-2016-11-02 11:00:27,871 DEBUG strToDict exception name 'url' is not defined
-2016-11-02 11:00:27,872 DEBUG start getHeads: apifixture.TempleteFixture
-2016-11-02 11:00:27,872 DEBUG end getHeads: apifixture.TempleteFixture
-2016-11-02 11:00:27,872 DEBUG start getHeads: apifixture.TempleteFixture
-2016-11-02 11:00:27,874 DEBUG heads: [u'testCaseId', u'projectId', 'test()']
-2016-11-02 11:00:27,874 DEBUG start: ExcelColumnFixture.doCells
-2016-11-02 11:00:27,874 DEBUG start: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,874 DEBUG end: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,875 DEBUG start: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,875 DEBUG end: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,875 DEBUG start: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,875 DEBUG start: ExcelColumnFixture.check
-2016-11-02 11:00:27,875 DEBUG start runTest: apifixture.TempleteFixture
-2016-11-02 11:00:27,875 DEBUG start test: apifixture.TempleteFixture
-2016-11-02 11:00:27,875 DEBUG start getParamlist: apifixture.TempleteFixture
-2016-11-02 11:00:27,877 DEBUG testCaseId: 1
-2016-11-02 11:00:27,877 DEBUG start setDynamicUrlPath: apifixture.TempleteFixture
-2016-11-02 11:00:27,877 DEBUG end setDynamicUrlPath: apifixture.TempleteFixture
-2016-11-02 11:00:27,877 DEBUG http://192.168.1.188:8000/mojing-server//auth/project/availableRoles
-2016-11-02 11:00:27,877 DEBUG {u'projectId': '9999'}
-2016-11-02 11:00:27,878 DEBUG start gethttputil.HttpClientUtil
-2016-11-02 11:00:27,878 DEBUG http://192.168.1.188:8000/mojing-server//auth/project/availableRoles?projectId=9999
-2016-11-02 11:00:27,884 DEBUG start endhttputil.HttpClientUtil
-2016-11-02 11:00:27,884 DEBUG respData is {"success":false,"errorMsg":{"title":null,"remark":null,"content":"遇到一个未知错误，反馈问题给我们。","warn":null},"traceInfo":"NkhPVWpmRGdsdjU4UnJMVVplTnMrOFdaRXY2NjhBczJGRDFnYnplbm16aDJpOG9lc2FvRC9CK05z\nMXNydWdmUGdzQWJxVVpPZGZwagptUmdKV3pwNklJZ0I3bkFUdjhtRGYwUW42Wk12Tk85a1VlZVY4\nR1NZVHlIa01ybWdSeEo0Y1hNTmtXM3d1VHhXemZUbStyOFBVU2QrCkgwUTZYMzBjNU1wNDdNN2w2\nYmh3bWR5ZC9aRFQ2ZkVzRXExMksvVEZaeUFlR1dheFdxMFQrK3ZzU2hpbDgrcCtkYXlTV3RHY1d3\nMHoKMFhpc1d1Vy9YQ3ZlZmk5c1grbEM4bVh0ZVZIbWxEeHBqUnVJMTFEWTgwUit6VnBTSGRFWlJs\nbDRnc3FSSUVFQWhkMHpqQ2N0SWd5UgpPc05jTjlMdjk0c0R3OVdFeGNxUHE5Wmo2cDQyVmY5M1pI\naWRtRUdiUFNtL0c2YU52NkV2ZWF1WEdxMDh5MDFBaVpYeDJ5K3UycU12CnYySmF3NHlZYlNlMTMw\ndHp4dUNMMmwwdFJsV3hkU1NRN0VZT2M1NmM1cEdYTjBLOExqdXdyL2JIVDQwNXB6cENpQVBPRm5O\nS2hwcm0KOEtQNElidmZaMkJxSnhNcXpsTE5aR05MK1BqNWVxNjRoTjc4VHY5VkpuWHZsWS8vOFZU\nbmtOVFBXbW5ZU2dOK0FvRTEwUnJLZ1NqMwpCWjVmNlB6QTZzUFJZWUdXUGNnT1M1NkhnNWlRM1k5\nSlJTV0Y0em8vOU1DbzJlVjJ6M1Nyc1dlOFlHQVUra0Nza2c9PQ==","data":{"token":"NEpuQmw4eFRkNzE3cWp3Y1FpSU9GS01QeVd2eVJPREFYRkFWRUFaWHN2az0=","trackingId":"912762e585e64bcf8b82728ac09858a9"},"loginStatus":1,"bindStatus":1,"errorLevel":4,"userFlag":0,"version":0,"code":null}
-2016-11-02 11:00:27,885 DEBUG end test: apifixture.TempleteFixture
-2016-11-02 11:00:27,887 DEBUG preResultInfo
-2016-11-02 11:00:27,887 DEBUG end runTest: apifixture.TempleteFixture
-2016-11-02 11:00:27,887 DEBUG end: ExcelColumnFixture.check
-2016-11-02 11:00:27,888 DEBUG end: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,888 DEBUG end: ExcelColumnFixture.doCells
-2016-11-02 11:00:27,888 DEBUG start: ExcelColumnFixture.doCells
-2016-11-02 11:00:27,888 DEBUG start: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,888 DEBUG end: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,888 DEBUG start: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,888 DEBUG end: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,890 DEBUG start: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,890 DEBUG start: ExcelColumnFixture.check
-2016-11-02 11:00:27,890 DEBUG start runTest: apifixture.TempleteFixture
-2016-11-02 11:00:27,890 DEBUG start test: apifixture.TempleteFixture
-2016-11-02 11:00:27,891 DEBUG start getParamlist: apifixture.TempleteFixture
-2016-11-02 11:00:27,891 DEBUG testCaseId: 2
-2016-11-02 11:00:27,891 DEBUG start setDynamicUrlPath: apifixture.TempleteFixture
-2016-11-02 11:00:27,891 DEBUG end setDynamicUrlPath: apifixture.TempleteFixture
-2016-11-02 11:00:27,891 DEBUG http://192.168.1.188:8000/mojing-server//auth/project/availableRoles
-2016-11-02 11:00:27,891 DEBUG {u'projectId': '9999'}
-2016-11-02 11:00:27,892 DEBUG start gethttputil.HttpClientUtil
-2016-11-02 11:00:27,892 DEBUG http://192.168.1.188:8000/mojing-server//auth/project/availableRoles?projectId=9999
-2016-11-02 11:00:27,898 DEBUG start endhttputil.HttpClientUtil
-2016-11-02 11:00:27,898 DEBUG respData is {"success":false,"errorMsg":{"title":null,"remark":null,"content":"遇到一个未知错误，反馈问题给我们。","warn":null},"traceInfo":"NkhPVWpmRGdsdjU4UnJMVVplTnMrOFdaRXY2NjhBczJGRDFnYnplbm16aDJpOG9lc2FvRC9CK05z\nMXNydWdmUGhIYnk1Z1RYVlhzawpvdS9HM1FRNHVrMVRibTd2MTBzTkFrN0h3dG5GcEI4STViT0pU\nQ3JOL1Q4RVpxdHh2UG9ZY1hNTmtXM3d1VHhXemZUbStyOFBVU2QrCkgwUTZYMzBjNU1wNDdNN2w2\nYmh3bWR5ZC9aRFQ2ZkVzRXExMksvVEZaeUFlR1dheFdxMFQrK3ZzU2hpbDgrcCtkYXlTV3RHY1d3\nMHoKMFhpc1d1Vy9YQ3ZlZmk5c1grbEM4bVh0ZVZIbWxEeHBqUnVJMTFEWTgwUit6VnBTSGRFWlJs\nbDRnc3FSSUVFQWhkMHpqQ2N0SWd5UgpPc05jTjlMdjk0c0R3OVdFeGNxUHE5Wmo2cDQyVmY5M1pI\naWRtRUdiUFNtL0c2YU52NkV2ZWF1WEdxMDh5MDFBaVpYeDJ5K3UycU12CnYySmF3NHlZYlNlMTMw\ndHp4dUNMMmwwdFJsV3hkU1NRN0VZT2M1NmM1cEdYTjBLOExqdXdyL2JIVDQwNXB6cENpQVBPRm5O\nS2hwcm0KOEtQNElidmZaMkJxSnhNcXpsTE5aR05MK1BqNWVxNjRoTjc4VHY5VkpuWHZsWS8vOFZU\nbmtOVFBXbW5ZU2dOK0FvRTEwUnJLZ1NqMwpCWjVmNlB6QTZzUFJZWUdXUGNnT1M1NkhnNWlRM1k5\nSlJTV0Y0em8vOU1DbzJlVjJ6M1Nyc1dlOFlHQVUra0Nza2c9PQ==","data":{"token":"NEpuQmw4eFRkNzE3cWp3Y1FpSU9GS01QeVd2eVJPREFYRkFWRUFaWHN2az0=","trackingId":"bb7f021aacbe491995574ac1ad4f7ec6"},"loginStatus":1,"bindStatus":1,"errorLevel":4,"userFlag":0,"version":0,"code":null}
-2016-11-02 11:00:27,900 DEBUG end test: apifixture.TempleteFixture
-2016-11-02 11:00:27,900 DEBUG preResultInfo
-2016-11-02 11:00:27,900 DEBUG end runTest: apifixture.TempleteFixture
-2016-11-02 11:00:27,901 DEBUG end: ExcelColumnFixture.check
-2016-11-02 11:00:27,901 DEBUG end: ExcelColumnFixture.doCell
-2016-11-02 11:00:27,901 DEBUG end: ExcelColumnFixture.doCells
-2016-11-02 11:00:27,901 DEBUG start genHtmlfile: apifixture.TempleteFixture
-2016-11-02 11:00:27,901 DEBUG end genHtmlfile: apifixture.TempleteFixture
-2016-11-02 11:00:27,903 DEBUG start genHtmlfile: apifixture.TempleteFixture
-2016-11-02 11:00:27,904 DEBUG end genHtmlfile: apifixture.TempleteFixture
-2016-11-02 11:00:27,904 DEBUG end: ExcelColumnFixture.doRows
-2016-11-02 11:00:27,904 DEBUG end: ExcelColumnFixture.doSheet
-2016-11-02 11:00:27,904 DEBUG start makeSummaryReport: fixture.ExcelColumnFixture
-2016-11-02 11:00:27,904 DEBUG end makeSummaryReport: fixture.ExcelColumnFixture
-2016-11-02 11:00:27,905 DEBUG end: ExcelColumnFixture.dosheets
-2016-11-02 11:00:27,950 DEBUG end: ExcelTestDriver.runTest
+2016-11-03 14:24:49,957 DEBUG start: ExcelTestDriver.runTest
+2016-11-03 14:24:49,987 DEBUG start: ExcelColumnFixture.dosheets
+2016-11-03 14:24:49,989 DEBUG start: ExcelColumnFixture.doSheet
+2016-11-03 14:24:50,109 DEBUG start: ExcelColumnFixture.doRows
+2016-11-03 14:24:50,109 DEBUG start processHeads: apifixture.TempleteFixture
+2016-11-03 14:24:50,109 DEBUG content_type rowpos: 5
+2016-11-03 14:24:50,109 DEBUG auth rowpos: 5
+2016-11-03 14:24:50,109 DEBUG argCounts rowpos: 5
+2016-11-03 14:24:50,111 DEBUG beforeTest rowpos: 6
+2016-11-03 14:24:50,111 DEBUG note rowpos: 7
+2016-11-03 14:24:50,111 DEBUG end processHeads: apifixture.TempleteFixture
+2016-11-03 14:24:50,111 DEBUG content:  application/json
+2016-11-03 14:24:50,387 DEBUG token is  "ea07459d292f4a1a987e86d483d992af"
+2016-11-03 14:24:50,388 DEBUG start getHeads: apifixture.TempleteFixture
+2016-11-03 14:24:50,388 DEBUG end getHeads: apifixture.TempleteFixture
+2016-11-03 14:24:50,388 DEBUG start getHeads: apifixture.TempleteFixture
+2016-11-03 14:24:50,388 DEBUG heads: [u'testCaseId', u'filepath', u'needSavePreResults', 'test()']
+2016-11-03 14:24:50,388 DEBUG start: ExcelColumnFixture.doCells
+2016-11-03 14:24:50,388 DEBUG start: ExcelColumnFixture.doCell
+2016-11-03 14:24:50,388 DEBUG end: ExcelColumnFixture.doCell
+2016-11-03 14:24:50,388 DEBUG start: ExcelColumnFixture.doCell
+2016-11-03 14:24:50,390 DEBUG end: ExcelColumnFixture.doCell
+2016-11-03 14:24:50,390 DEBUG start: ExcelColumnFixture.doCell
+2016-11-03 14:24:50,390 DEBUG end: ExcelColumnFixture.doCell
+2016-11-03 14:24:50,390 DEBUG start: ExcelColumnFixture.doCell
+2016-11-03 14:24:50,390 DEBUG start: ExcelColumnFixture.check
+2016-11-03 14:24:50,390 DEBUG start runTest: apifixture.TempleteFixture
+2016-11-03 14:24:50,391 DEBUG start test: apifixture.TempleteFixture
+2016-11-03 14:24:50,391 DEBUG start getParamlist: apifixture.TempleteFixture
+2016-11-03 14:24:50,391 DEBUG initBeforeTest:  "ea07459d292f4a1a987e86d483d992af"
+2016-11-03 14:24:50,391 DEBUG testCaseId: 1
+2016-11-03 14:24:50,415 DEBUG start setDynamicUrlPath: apifixture.TempleteFixture
+2016-11-03 14:24:50,417 DEBUG end setDynamicUrlPath: apifixture.TempleteFixture
+2016-11-03 14:24:50,418 DEBUG end test: apifixture.TempleteFixture
+2016-11-03 14:24:50,418 DEBUG start savePreResultInfo: apifixture.TempleteFixture
+2016-11-03 14:24:50,418 DEBUG start savePreResultInfo: {"error":"not a valid non-string sequence or mapping object"}
+2016-11-03 14:24:50,418 DEBUG respDict:  {'error': 'not a valid non-string sequence or mapping object'}
+2016-11-03 14:24:50,420 DEBUG needSavePreResults:  {"token":"*\w+"}
+2016-11-03 14:24:50,420 DEBUG needSavePreResultDict:  {'token': '*\\w+'}
+2016-11-03 14:24:50,420 ERROR nothing to repeat,
+2016-11-03 14:24:50,420 DEBUG end savePreResultInfo: apifixture.TempleteFixture
+2016-11-03 14:24:50,421 DEBUG preResultInfo
+2016-11-03 14:24:50,421 ERROR strToDict exception, ,invalid syntax (<string>, line 1)
+2016-11-03 14:24:50,421 ERROR data is, ,"data":\d{16}
+2016-11-03 14:24:50,421 DEBUG end runTest: apifixture.TempleteFixture
+2016-11-03 14:24:50,423 DEBUG end: ExcelColumnFixture.check
+2016-11-03 14:24:50,423 DEBUG end: ExcelColumnFixture.doCell
+2016-11-03 14:24:50,423 DEBUG end: ExcelColumnFixture.doCells
+2016-11-03 14:24:50,423 DEBUG start genHtmlfile: apifixture.TempleteFixture
+2016-11-03 14:24:50,424 DEBUG end genHtmlfile: apifixture.TempleteFixture
+2016-11-03 14:24:50,424 DEBUG start genHtmlfile: apifixture.TempleteFixture
+2016-11-03 14:24:50,424 DEBUG end genHtmlfile: apifixture.TempleteFixture
+2016-11-03 14:24:50,424 DEBUG end: ExcelColumnFixture.doRows
+2016-11-03 14:24:50,424 DEBUG end: ExcelColumnFixture.doSheet
+2016-11-03 14:24:50,426 DEBUG start makeSummaryReport: fixture.ExcelColumnFixture
+2016-11-03 14:24:50,426 DEBUG end makeSummaryReport: fixture.ExcelColumnFixture
+2016-11-03 14:24:50,426 DEBUG end: ExcelColumnFixture.dosheets
+2016-11-03 14:24:50,479 DEBUG end: ExcelTestDriver.runTest

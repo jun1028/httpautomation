@@ -131,14 +131,16 @@ class HttpApiFixture(ExcelColumnFixture):
     def beforeTest(self, rowpos):
         fixtureName = ''
         fixtureParams = ''
+        returnparam = ''
         for col in range(0, 2):
             temp = self.excelAPP.getCellStrValue(rowpos, col)
             if len(temp) > 1 and temp.lower().find('fixture') > -1:
-                fixtureName = self.excelAPP.getCellStrValue(rowpos, col)
+                fixtureName   = self.excelAPP.getCellStrValue(rowpos, col)
                 fixtureParams = self.excelAPP.getCellStrValue(rowpos, col + 1)
+                returnparam   =  self.excelAPP.getCellStrValue(rowpos, col + 2)
                 rowpos += 1
                 break
-        return (fixtureName, fixtureParams), rowpos
+        return (fixtureName, fixtureParams, returnparam), rowpos
     
     # @return: note, rowpos
     def getComment(self, rowpos, ncols):
@@ -176,15 +178,13 @@ class HttpApiFixture(ExcelColumnFixture):
                     for key in needSavePreResultDict:
                         self.getValueFromResp(key, needSavePreResultDict[key], respDict)
                 else:
-                    print 'json或dictionary is error'  + self.needSavePreResults#忽略
+                    print 'json or dictionary is error'  + self.needSavePreResults#忽略
             else:
-                needSavePreResultList = self.needSavePreResults.split(';')
-                for savePreResult in needSavePreResultList:
-                    [key, value] = savePreResult.split('=')
-#                    if respDict:
-#                        self.getValueFromResp(key, value, respDict)
-#                    else:
-                    self.getValueFromResp(key,  value, resp)
+                if not ('error' in respDict and respDict['error']):
+                    needSavePreResultList = self.needSavePreResults.split(';')
+                    for savePreResult in needSavePreResultList:
+                        [key, value] = savePreResult.split('=')
+                        self.getValueFromResp(key,  value, resp)
         except BaseException, e:
             Log.error(e)
         Log.debug('end savePreResultInfo: ' + self._CLASSNAME)
@@ -221,13 +221,12 @@ class HttpApiFixture(ExcelColumnFixture):
         pass
     
     def addPreResultToParams(self):
-        self.addLoginToParams()
         self.addSpeficPreResultToParams()
          
     def addLoginToParams(self):
-        if hasattr(self, 'initBeforeTest') and 'ut' in self.initBeforeTest:
+        if hasattr(self, 'initBeforeTest') and self.initBeforeTest:
             Log.debug("initBeforeTest: ", self.initBeforeTest)
-            self.args['ut'] = self.initBeforeTest['ut']
+            self.args['token'] = self.initBeforeTest
     
     def addSpeficPreResultToParams(self):
         if hasattr(self, 'preResultInfo') and self.preResultInfo is dict:
@@ -258,8 +257,9 @@ class HttpApiFixture(ExcelColumnFixture):
     
     def runSetupFixture(self):
         if self.setupFixture:
-            fixturePath = self.setupFixture[0]
+            fixturePath   = self.setupFixture[0]
             fixtureParams = self.setupFixture[1]
+            returnparam   = self.setupFixture[2]
             temp = fixturePath.split('.')
             clas = temp[-1]
             if len(temp) == 1:
@@ -267,8 +267,7 @@ class HttpApiFixture(ExcelColumnFixture):
             try:
                 exec 'import ' + fixturePath
                 exec 'fixture = ' + fixturePath + '.' + clas + '()' 
-                self.initBeforeTest = fixture.run(fixtureParams)
-                print self.initBeforeTest
+                self.initBeforeTest = fixture.run(fixtureParams, returnparam)
             except BaseException, e:
                 Log.error('runSetupFixture ERROR:', e)
 

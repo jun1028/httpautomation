@@ -82,7 +82,12 @@ class HttpClientUtil(object):
         elif methodname.upper() == 'GET':
             response = self.get(url, args, content_type)
         elif methodname.upper() == 'UPLOAD':
-            response = self.uploadfile(url, args)
+            print 'upload'
+            if  os.path.exists(args):
+                response = self.uploadfile(url, args)
+            else:
+                Log.error('filepath is not exists: ', args)
+                response = None
         else:
             print 'does not implement!'
         return response

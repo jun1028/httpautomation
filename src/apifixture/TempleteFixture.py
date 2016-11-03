@@ -37,7 +37,7 @@ class TempleteFixture(HttpApiFixture):
             self.args = {}
             paramlist = self.getParamlist()
             self.addParams(paramlist)
-            self.addLoginToParams()
+            self.setLoginInfo(self.client)
             self.addPreResultToParams() #从上次请求产生的response中取得需要保存的参数信息，并保存到本次请求的参数列表中
             Log.debug('testCaseId:', self.testCaseId)
             respData = ''
@@ -45,17 +45,22 @@ class TempleteFixture(HttpApiFixture):
                 #默认为post请求
                 if not hasattr(self, 'requestMethod') and not self.requestMethod:
                     self.requestMethod = 'post'
-                print self.args
                 if 'filepath' in self.args:
-                    self.requestMethodself = 'upload'
+                    self.requestMethod = 'upload'
                     filepath = self.args['filepath']
-                    self.args = filepath
+                    Log.debug("filepath:", filepath.decode('utf-8').encode('gb2312'))
+                    self.args = filepath.decode('utf-8').encode('gb2312')
+#                     self.args = filepath.decode('utf-8').encode('gb2312')
+                    self.client.referer = "http://pre.moojnn.com/datasource.html" 
                 #若果请求的路径信息中含有动态变量，则从参数列表中读取
                 self.setDynamicUrlPath()
                 #开始HTTP请求
                 resp = self.client.dorequest(self.url, self.args, \
                                              methodname=self.requestMethod)
-                respData = resp.read()
+                if isinstance(resp, str):
+                    respData = resp
+                else:
+                    respData = resp.read()
                 Log.debugvar('respData is ', respData)
             except HTTPError, e:
                 respData = '{"error":"' + str(e) + '"}'
@@ -115,14 +120,14 @@ class TempleteFixture(HttpApiFixture):
         try:
             self.jsonResult = strToDict(respData)
             if self.jsonResult and 'data' in self.jsonResult:
-                if len(self.jsonResult['data']) > 0:
-                    divName = 'div' + self.testCaseId
-                    self.link =  "<p align='left' ><br><a href=javascript:show('" + divName + "');>show json text</a></p>"  + \
-                                    "<br><div id='" + divName + "' style='display:none;'>"+ respData + "</div>"
+                divName = 'div' + self.testCaseId
+                self.link =  "<p align='left' ><br><a href=javascript:show('" + divName + "');>show json text</a></p>"  + \
+                                "<br><div id='" + divName + "' style='display:none;'>"+ respData + "</div>"
             else:
                 self.link = "<i>the Data of Response is %s<i>" %  respData
-        except:
-            self.link = "response data is %s " %  respData
+        except BaseException, e:
+            print e
+            self.link = " response data is %s " %  respData
                 
     def saveRespDataToFile(self, respData):
         fileName = str(self.testCaseId + 'json.txt')

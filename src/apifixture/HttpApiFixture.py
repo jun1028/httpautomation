@@ -5,7 +5,6 @@
 '''
 
 from apifixture.httpconf import DEFAULT_CONTENT_TYPE
-from fixture.CommonFixture import CommonFixture
 from fixture.ExcelColumnFixture import ExcelColumnFixture
 from log.Log import Log
 from util.jsonutil import strToDict
@@ -223,10 +222,13 @@ class HttpApiFixture(ExcelColumnFixture):
     def addPreResultToParams(self):
         self.addSpeficPreResultToParams()
          
-    def addLoginToParams(self):
+    def setLoginInfo(self, client):
         if hasattr(self, 'initBeforeTest') and self.initBeforeTest:
+            if "cookie" in self.initBeforeTest:
+                client.cookie = self.initBeforeTest['cookie']
+            if "token" in self.initBeforeTest:
+                client.token = self.initBeforeTest['token']
             Log.debug("initBeforeTest: ", self.initBeforeTest)
-            self.args['token'] = self.initBeforeTest
     
     def addSpeficPreResultToParams(self):
         if hasattr(self, 'preResultInfo') and self.preResultInfo is dict:

@@ -116,7 +116,7 @@ class ResultCheck(object):
     @staticmethod
     def checkResult(actualResult, expectResult):
         bCmpResult, message = -1, "only output"
-        if expectResult.find('{') > -1: #json
+        if expectResult.find('{') == 0 : #json
             expectResultDict = strToDict(expectResult)
             if "type" in expectResultDict and expectResultDict['type'] == 'part':
                 print 'part'

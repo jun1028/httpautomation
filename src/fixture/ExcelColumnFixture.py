@@ -624,7 +624,7 @@ class Cell:
 
     def __init__(self, text):
         self.text = text
-        self.tag = '<td align=center>'
+        self.tag = '<td align=left>'
 
     def addToTag(self, text):
         self.tag = self.tag[:-1] + text + ">"

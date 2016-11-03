@@ -4,19 +4,21 @@
 
 @author: Water.Zhang
 '''
+from log.Log import Log
+from poster.encode import multipart_encode
+from poster.streaminghttp import register_openers
+from util.jsonutil import strToDict
 import StringIO
 import cookielib
 import gzip
+import httplib
 import json
+import os
 import re
 import sys
 import urllib
 import urllib2
-import httplib
 
-from log.Log import Log
-from poster.encode import multipart_encode
-from poster.streaminghttp import register_openers
 
 try:
     import httplib2
@@ -55,6 +57,8 @@ class HttpClientUtil(object):
     headerinfo = ''
 
     def __init__(self):
+        self.token = ''
+        self.referer = ''
         self.headers = {}
         #cookies
         self.cookie = ''
@@ -77,17 +81,19 @@ class HttpClientUtil(object):
                         content_type=None, \
                         methodname='POST'):
         response = None
+        Log.debug('url:', url)
+        Log.debug('args:', args)
+        self.setHeader()
         if methodname.upper() == 'POST':
             response = self.httppost(url, args, content_type)
         elif methodname.upper() == 'GET':
             response = self.get(url, args, content_type)
         elif methodname.upper() == 'UPLOAD':
-            print 'upload'
             if  os.path.exists(args):
-                response = self.uploadfile(url, args)
+                response = self.uploadfile(url, args, content_type)
             else:
                 Log.error('filepath is not exists: ', args)
-                response = None
+                response = 'filepath is not exists:'
         else:
             print 'does not implement!'
         return response
@@ -172,10 +178,17 @@ class HttpClientUtil(object):
 
     def post(self, url, args):
         return self.do(url, args, methodname='post')
-        
-    def setReqHeader(self, request, headers):
-        for header in headers:
-            request.add_header(header, headers[header])
+    
+    def setHeader(self):
+        if hasattr(self, 'cookie') and len(self.cookie) > 1:
+            self.headers['Cookie'] = self.cookie
+        if hasattr(self, 'referer') and len(self.referer) > 1:
+            self.headers['Referer'] = self.referer
+                
+    def setReqHeader(self, request, headers=None):
+        if headers:
+            for header in headers:
+                request.add_header(header, headers[header])
         return request
     
     def proceHeadInfo(self, info):
@@ -186,13 +199,11 @@ class HttpClientUtil(object):
         except:
             Log.debug('proceHeadInfo error') 
         
-    def uploadfile(self, url, filepath):
+    def uploadfile(self, url, filepath, content_type="multipart/form-data"):
         register_openers()
         fi = open(filepath, "rb")
         datagen, headers = multipart_encode({'file': fi})
         request = urllib2.Request(url, datagen, headers)
-        if self.cookie:
-            self.headers['Cookie'] = self.cookie
         if self.headers:
             request = self.setReqHeader(request, self.headers)
         response = urllib2.urlopen(request)
@@ -260,6 +271,14 @@ class HttpClientUtil(object):
 #test
 if __name__ == '__main__':
     client = HttpClientUtil()
+    args = strToDict("{'password': 'e10adc3949ba59abbe56e057f20f883e', 'name': '18015505671L', 'code': ''}")
+    resp = client.dorequest("http://pre.moojnn.com/mojing-server/login ", args)
+    client.cookie = resp.info()['Set-Cookie']
+#    client.cookie ='JSESSIONID=2851EAEB5A2DFBBC68E5F0E9C0B8DA42; Path=/mojing-server/; HttpOnly, SERVERID=acbb2b8523be9629ba66f0a82e331010|1478163624|1478163624;Path=/'
+    client.referer = "http://pre.moojnn.com/datasource.html" 
+    client.uploadfile("http://pre.moojnn.com/mojing-server/ds/fileupload", "C:\\Users\\water\\Desktop\\test.txt")
+#    args = strToDict("{'password': 'e10adc3949ba59abbe56e057f20f883e', 'name': '18015505671L', 'code': ''}")
+#    client.dorequest("http://pre.moojnn.com/mojing-server/login ", args)
 #     try:
 #         req = urllib2.Request(url)
 #         res = urllib2.urlopen(req)

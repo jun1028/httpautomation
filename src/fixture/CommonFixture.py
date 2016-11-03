@@ -82,10 +82,10 @@ class CommonFixture(object):
         pass
     
     def addPreResultToParams(self):
-        self.addLoginToParams()
+        self.setLoginInfo()
         self.addSpeficPreResultToParams()
          
-    def addLoginToParams(self):
+    def setLoginInfo(self):
         if self.loginInfo and 'ut' in self.loginInfo:
             Log.debug("loginInfo", self.loginInfo)
             self.args['ut'] = self.loginInfo['ut']

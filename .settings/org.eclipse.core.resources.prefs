@@ -12,6 +12,7 @@ encoding//src/fixture/DynamicExecFixture.py=UTF-8
 encoding//src/fixture/ExcelColumnFixture.py=UTF-8
 encoding//src/fixture/FliterExcelColumnFixture.py=UTF-8
 encoding//src/fixture/KeywordTable.py=UTF-8
+encoding//src/fixture/LoginFixture.py=UTF-8
 encoding//src/httputil/__init__.py=UTF-8
 encoding//src/log/Log.py=UTF-8
 encoding//src/runner/ExcelRunner.py=UTF-8

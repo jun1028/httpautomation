@@ -38,14 +38,14 @@ class TextFixture(object):
                 fixturePath = 'fixture.TextFixture'
             else:
                 self.readedLines += 1
-            clas = fixturePath.split('.')[-1]
+            _CLASSNAME = fixturePath.split('.')[-1]
             # fix for illegal Java trick in AllFiles. Frankly, I like it!
             i = fixturePath.split('$')
             try:
                 if len(i) == 1:
                     exec 'import ' + fixturePath
 #                     # test class method
-                    exec 'fixture = ' + fixturePath + '.' + clas + '()' 
+                    exec 'fixture = ' + fixturePath + '.' + _CLASSNAME + '()' 
                 else:
                     exec "import %s" % (i[0],)
                     exec "fixture = %s.%s()" % (i[0], i[1])

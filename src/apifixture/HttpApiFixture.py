@@ -4,29 +4,103 @@
 @author: Water.Zhang
 '''
 
+from apifixture import LOGFIELPATH
 from apifixture.httpconf import DEFAULT_CONTENT_TYPE
+from check.result_check import ResultCheck
+from django.core.files import temp
 from fixture.ExcelColumnFixture import ExcelColumnFixture
+from httputil import HttpClientUtil
 from log.Log import Log
-from util.jsonutil import strToDict
+from urllib2 import HTTPError
+from util.jsonutil import strToDict, strToJson
+import os
 import re
 
 
 class HttpApiFixture(ExcelColumnFixture):
 
     """
-    templete to process http api 
+    process http api 
     1.read excel file, process header of http request.
     2.e.g. url = interface + function..
     """
-    _CLASSNAME = 'apifixture.TempleteFixture'
+    _CLASSNAME = 'apifixture.HttpApiFixture'
     note      = ''
     comments  = ['note', 'Note', 'comment', 'Comment']
     interface = ''  # http url, like http://www.xxx.com:8080/path
-    function  = ''
-    argCounts = 0
-    setupFixture  = []
-    preResultInfo = {}
-    initBeforeTest = {}
+    function  = '' #path
+    argCounts = 0 #
+    initSetupFixture  = [] #在测试运行前需要执行的测试构建的【构建名，构建参数】
+    preResultInfo = {} #前一次请求response的需要保存的结果信息
+    client = HttpClientUtil() #客户端请求
+    previousResp = None  #前一次请求的response
+    link = ''
+    userdefinefixtureresult = None #测试执行过程中测试构建执行的测试结果信息
+    reqargs = {} #http请求参数
+    initInfoBeforeTest = {}
+    
+    def runTest(self, cell, a):
+        Log.debug('start runTest: ' + self._CLASSNAME)
+        try:
+            if not self.expected:
+                self.expected = a.parse(cell.text)
+        except BaseException, e:
+            Log.debug("testcaseid " + str(self.testCaseId))  
+            Log.debug(e)
+            self.expected = ''
+        try:
+            actualresult = a.get() #调用测试构建定义的方法
+            try:
+                #self.needSavePreResults用于保存上次请求response需要保存的测试字段值，不同字段用“，”分割；可用正则或完成字段名，
+                if hasattr(self, 'needSavePreResults') and self.needSavePreResults:
+                    self.preResultInfo = {} #clear上次保存的信息
+                    self.savePreResultInfo(actualresult)
+                Log.debug('preResultInfo', self.preResultInfo)
+            except BaseException, e:
+                Log.error('invoke savePreResultInfo error', e)
+            if self.expected and actualresult:
+                bresult, message = ResultCheck.checkResult(actualresult, self.expected)
+            else:
+                if actualresult and actualresult.find('error') < 0:
+                    bresult = 1
+                    message = "expect result column is null, only output!\n"
+                else:
+                    bresult = 0
+                    message = "expect result column is null, maybe error!\n the url:%s \n" % self.url
+            if bresult > 0:
+                self.right(cell, message)
+            elif bresult == 0:
+                self.wrong(cell, message)
+            else:
+                self.output(cell, message)
+            try:
+                cell.text = cell.text + self.link
+            except:
+                cell.text = self.link
+        except BaseException, e:
+            self.exception(cell, e)
+            Log.exception(e)
+        Log.debug('end runTest: ' + self._CLASSNAME)
+    
+    def doRequest(self, url, reqargs, requestMethod):
+        respData = None
+        #开始HTTP请求
+        try:
+            resp = self.client.dorequest(url, reqargs, \
+                                         methodname=requestMethod)
+            if self.url.find('login') > -1: #如果是一个登陆的url
+                self.initInfoBeforeTest['cookie'] = self.client.getCookie(resp.info())
+            if isinstance(resp, str):
+                respData = resp
+            else:
+                respData = resp.read()
+            Log.debugvar('respData is ', respData)
+        except HTTPError, e:
+            respData = '{"error":"' + str(e) + '"}'
+        except Exception, e:
+            respData = '{"error":"' + str(e) + '"}'
+        self.previousResp = respData
+        return respData
     
     def processHeads(self, rowpos, ncols):
         Log.debug('start processHeads: ' + self._CLASSNAME)
@@ -39,14 +113,15 @@ class HttpApiFixture(ExcelColumnFixture):
         Log.debug('auth rowpos:', rowpos)
         self.argCounts, rowpos = self.getArgCounts(rowpos, ncols)
         Log.debug('argCounts rowpos:', rowpos)
-        self.setupFixture, rowpos = self.beforeTest(rowpos)
-        Log.debug('beforeTest rowpos:', rowpos)
+        self.initSetupFixture, rowpos = self.getInitSetupFixture(rowpos)
+        Log.debug('initBeforeTest rowpos:', rowpos)
         self.note, rowpos = self.getComment(rowpos, ncols)
         Log.debug('note rowpos:', rowpos)
         Log.debug('end processHeads: ' + self._CLASSNAME)
         if not self.content_type:
             self.content_type = DEFAULT_CONTENT_TYPE
         Log.debug('content: ', self.content_type)
+        Log.debug('end processHeads: ' + self._CLASSNAME)
         return rowpos
 
     # @return: interface, rowpos
@@ -126,8 +201,9 @@ class HttpApiFixture(ExcelColumnFixture):
                 break
         return argCounts, rowpos
     
-    # @return: interface, rowpos
-    def beforeTest(self, rowpos):
+    # @return:运行测试前需要执行的测试
+    def getInitSetupFixture(self, rowpos):
+        result = []
         fixtureName = ''
         fixtureParams = ''
         returnparam = ''
@@ -139,7 +215,9 @@ class HttpApiFixture(ExcelColumnFixture):
                 returnparam   =  self.excelAPP.getCellStrValue(rowpos, col + 2)
                 rowpos += 1
                 break
-        return (fixtureName, fixtureParams, returnparam), rowpos
+        if fixtureName:
+            result = [fixtureName, fixtureParams, returnparam]
+        return result, rowpos
     
     # @return: note, rowpos
     def getComment(self, rowpos, ncols):
@@ -160,6 +238,7 @@ class HttpApiFixture(ExcelColumnFixture):
                 break
         return note, rowpos
     
+    #把保存上次请求的结果信息
     #param: type dict {} result, 上次请求的response信息
     #param getvalueway ,从response取值的方式，=0 dict方式,=1 通过正则
     #return type dict {}
@@ -175,7 +254,7 @@ class HttpApiFixture(ExcelColumnFixture):
                 if needSavePreResultDict:
                     Log.debug('needSavePreResultDict: ', needSavePreResultDict)
                     for key in needSavePreResultDict:
-                        self.getValueFromResp(key, needSavePreResultDict[key], respDict)
+                        self.preResultInfo[key] = self.getValueFromRespByDict(key, needSavePreResultDict[key], respDict)
                 else:
                     print 'json or dictionary is error'  + self.needSavePreResults#忽略
             else:
@@ -183,95 +262,214 @@ class HttpApiFixture(ExcelColumnFixture):
                     needSavePreResultList = self.needSavePreResults.split(';')
                     for savePreResult in needSavePreResultList:
                         [key, value] = savePreResult.split('=')
-                        self.getValueFromResp(key,  value, resp)
+                        self.preResultInfo[key] = self.getValueFromRespByPattern(value, resp)
         except BaseException, e:
             Log.error(e)
         Log.debug('end savePreResultInfo: ' + self._CLASSNAME)
         return self.preResultInfo
     
-    def getValueFromResp(self, key, value, resp):
-        if resp is dict and key in resp:
-            self.preResultInfo[key] = resp[key]
-        else:
-            self.preResultInfo[key] = self.getPatternResultStr(\
-                                                value, resp)
+    def getValueFromRespByDict(self, key, respDict):
+        keyvalue = ''
+        if isinstance(respDict, dict) and key in respDict:
+            keyvalue = str(respDict[key])
+        return keyvalue
     
-    def getPatternResultStr(self, pattern, resp):
+    def getValueFromRespByPattern(self, pattern, resp):
         result = ''
         temp = re.findall(pattern, resp, re.IGNORECASE)
         if temp:
             #获取匹配的第一个元组
-            result = temp[0].split(":")[-1]#
+            try:
+                result = temp[0].split(":")[-1]#
+            except BaseException, e:
+                Log.error('getValueFromRespByPattern: ', e)
         return result
     
-    def getneedSavePreResultkeyRe(self, value, key):
-        restr = ''
-        try:
-            restr = '\\"' + key + '\\"' + ':' + '\\"' + value + '\\"'
-        except:
-            pass
-        Log.debug('match re: ', restr)
-        return restr
-
-    def savePreResultInfoByRe(self, result):
-        pass
-    
-    def savePreResultInfoByDict(self, result):
-        pass
     
     def addPreResultToParams(self):
         self.addSpeficPreResultToParams()
          
     def setLoginInfo(self, client):
-        if hasattr(self, 'initBeforeTest') and self.initBeforeTest:
-            if "cookie" in self.initBeforeTest:
-                client.cookie = self.initBeforeTest['cookie']
-            if "token" in self.initBeforeTest:
-                client.token = self.initBeforeTest['token']
-            Log.debug("initBeforeTest: ", self.initBeforeTest)
+        Log.debug('start setLoginInfo: ' + self._CLASSNAME)
+        if hasattr(self, 'initInfoBeforeTest') and self.initInfoBeforeTest:
+            if "cookie" in self.initInfoBeforeTest:
+                client.cookie = self.initInfoBeforeTest['cookie']
+            if "token" in self.initInfoBeforeTest:
+                client.token = self.initInfoBeforeTest['token']
+            Log.debug("initInfoBeforeTest: ", self.initInfoBeforeTest)
+        Log.debug('end setLoginInfo: ' + self._CLASSNAME)
     
     def addSpeficPreResultToParams(self):
         if hasattr(self, 'preResultInfo') and self.preResultInfo is dict:
-            self.args.update(self.preResultInfo)
+            self.reqargs.update(self.preResultInfo)
     
-    def getUrl(self):
-        #如果测试用例没有url列,或者为空，则用全局的值
+    def setUrl(self):
+        #如果测试用例没有url列,或者为空，则用表头的url值
         if not hasattr(self, 'url') or not self.url:
-            self.url = self.interface + self.function
+            if self.interface and self.function:
+                self.url = self.interface + self.function
+            else:
+                Log.debug("self.interface or  self.function is none")
+                Log.debug("self.url", self.url)
         return self.url
+    
+    def setRequestMethod(self):
+        if not hasattr(self, 'requestMethod') and not self.requestMethod:
+            self.requestMethod = 'post'
     
     #从测试文件，如excel或许excel中获取fixturename 列，并调用其run(),
     #@return result type, dict    
-    def getFixture(self):
-        result = {}
-        if hasattr(self, 'fixturename'):
-            fixturepath = self.fixturename
-            fixturepath = fixturepath.strip()
-            fixturename = fixturepath.split('.')[-1]
-            try:
-                exec 'import ' + fixturepath
-                # test class method
-                exec 'execfixture = ' + fixturepath + '.' + fixturename + '()' 
-                result = execfixture.run()
-            except BaseException, e:
-                Log.error(e)
-        return result
+    def execFixture(self):
+        if hasattr(self, 'userdefinefixture'):
+            userdefinefixture = self.getFixture(self.userdefinefixture)
+            self.userdefinefixtureresult = userdefinefixture.run()
     
-    def runSetupFixture(self):
-        if self.setupFixture:
-            fixturePath   = self.setupFixture[0]
-            fixtureParams = self.setupFixture[1]
-            returnparam   = self.setupFixture[2]
-            temp = fixturePath.split('.')
-            clas = temp[-1]
-            if len(temp) == 1:
-                fixturePath = 'fixture.' + clas
-            try:
-                exec 'import ' + fixturePath
-                exec 'fixture = ' + fixturePath + '.' + clas + '()' 
-                self.initBeforeTest = fixture.run(fixtureParams, returnparam)
-            except BaseException, e:
-                Log.error('runSetupFixture ERROR:', e)
+    def getFixture(self, fixturePath):
+        fixture = None
+        temp = fixturePath.split('.')
+        _CLASSNAME = temp[-1]
+        if len(temp) == 1:
+            fixturePath = 'fixture.' + _CLASSNAME
+        try:
+            exec 'import ' + fixturePath
+            exec 'fixture = ' + fixturePath + '.' + _CLASSNAME + '()' 
+        except BaseException, e:
+            Log.error('getFixture error:', e)
+        return fixture
+    
+    def runInitSetupFixture(self):
+        Log.debug('start runInitSetupFixture: ' + self._CLASSNAME)
+        fixturePath   = self.initSetupFixture[0]
+        fixtureParams = self.initSetupFixture[1]
+        returnparam   = self.initSetupFixture[2]
+        fixture = self.getFixture(fixturePath)
+        if fixture:
+            self.initInfoBeforeTest = fixture.run(fixtureParams, returnparam)
+            Log.debug('end runInitSetupFixture: ', self.initInfoBeforeTest)
+        Log.debug('end runInitSetupFixture: ' + self._CLASSNAME)
+                
+    def genResultLink(self, respData):
+        try:
+            jsonResult = strToDict(respData)
+            if jsonResult and 'data' in jsonResult:
+                divName = 'div' + self.testCaseId
+                self.link =  "<p align='left' ><br><a href=javascript:show('" + divName + "');>show json text</a></p>"  + \
+                                "<br><div id='" + divName + "' style='display:none;'>"+ respData + "</div>"
+            else:
+                self.link = "<i>the Data of Response is %s<i>" %  respData
+        except BaseException, e:
+            print e
+            self.link = " response data is %s " %  respData
+                
+    def saveRespDataToFile(self, respData):
+        fileName = str(self.testCaseId + 'json.txt')
+        path = LOGFIELPATH + self.curShName
+        if not os.path.exists(LOGFIELPATH):
+            os.mkdir(LOGFIELPATH)
+        try:
+            if not os.path.exists(path):
+                os.mkdir(path)
+            fileObject = open(path + os.sep + fileName, 'w')
+            fileObject.write(respData)
+            fileObject.close()
+        except BaseException, e:
+            Log.error("create jsontxt fail!", e)
+            
+    #若果请求的路径参数包含{变量}的变量，则从当期的测试参数中取
+    #foxexample: url= http://www.xxx.com:8080/path1/{patah2}/p
+    def setDynamicUrlPath(self, fromparams={}):
+        Log.debug('start setDynamicUrlPath: ' + self._CLASSNAME)
+        pattern = '{\\w+}'
+        if not fromparams:
+            fromparams = self.reqargs
+        dynamicPathList = re.findall(pattern, self.url, re.IGNORECASE)
+        try:
+            for dynamicpath in dynamicPathList:
+                dynamicpathVar = dynamicpath[1:-1] #去掉{}
+                print fromparams
+                if dynamicpathVar in fromparams:
+                    self.url = self.url.replace(dynamicpath, fromparams[dynamicpathVar])
+                else:
+                    Log.error('setDynamicUrlPath fail, reqargs has not ' + dynamicpathVar)
+        except Exception, e:
+            Log.error(e)
+        Log.debug('end setDynamicUrlPath: ' + self._CLASSNAME)
+    
+    #需要重新编写,去掉不做请求的参数
+    def fliterParamlist(self):
+        Log.debug('start fliterParamlist: ' + self._CLASSNAME)
+        paramList = []
+        for param in self._typeDict:
+            #如果包含_下划线，表明不是用作请求参数
+            if param.find('_') >0 or param.lower().find('url') > -1 \
+                or param.lower().find('savepre') > -1 or \
+                param.lower().find('fixture') > -1:
+                continue
+            paramList.append(param)
+        return paramList
+        Log.debug('end fliterParamlist: ' + self._CLASSNAME)
+
+    def setReqParams(self):
+        if hasattr(self, '_args'): #如果有_args变量
+            self.setReqParamsByArgjson()
+        else:
+            self.setReqParamsByBuildinVar()
+        
+    def setReqParamsByBuildinVar(self):
+        argv = self.fliterParamlist()
+        if isinstance(argv, list):
+            for arg in argv:
+                self._addValueToParam(arg)
+    
+    def setReqParamsByArgjson(self):
+        self.reqargs = strToDict(self._args)
+        if self.reqargs:
+            #如果json中包含%varname%的变量
+            fromWhDict = strToDict(self.previousResp)
+            if fromWhDict:
+                for reqarg in self.reqargs:
+                    value = self.reqargs[reqarg]
+                    if value.find('%') > -1:
+                        self.reqargs[reqarg] = \
+                            self.getDynamicParamVlaue(value, fromWhDict)
+        else:
+            print 'setReqParamsByArgjson error', self._args
+            print 'maybe the json format is wrong!'
+            Log.error('setReqParamsByArgjson error', self._args)
+      
+    def getDynamicParamVlaue(self, paramvalue, fromWhDict):
+        pattern = '%\\w+%' #动态参数
+        result  = paramvalue
+        try:
+            valueList = re.findall(pattern, paramvalue, re.IGNORECASE)
+            if len(valueList) > 0:
+                keyvalue = valueList[0][1:-1] #去掉%%
+                result = self.getValueFromRespByDict(keyvalue, fromWhDict)
+                print keyvalue, result
+        except BaseException, e:
+            Log.error('getDynamicParamVlaue error:', e)
+        return result
+                    
+    def _addValueToParam(self, arg):
+        isnull = False
+        if hasattr(self, arg):
+            # self.arg的内容不为空
+            exec "isnull = (self." + arg + " != '')"
+            if isnull:
+                exec 'temp = self.' + arg
+                self.reqargs[arg] = temp
+
+    def processData(self, data):
+        return  ''
+    
+    def clearBeforeTest(self):
+        if self.reqargs and isinstance(self.reqargs, dict):
+            self.reqargs.clear()
+    
+    def befortest(self):
+        Log.debug('start befortest: ' + self._CLASSNAME)
+        self.setLoginInfo(self.client)
+        Log.debug('end befortest: ' + self._CLASSNAME)
 
 if __name__ == "__main__":
     print 'dff'

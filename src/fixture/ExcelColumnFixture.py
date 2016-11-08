@@ -115,12 +115,12 @@ class ExcelColumnFixture(Report):
                 fixturePath = 'apifixture.TempleteFixture'
                 #sys.exit(0)
                 #fixturePath = 'apifixture.TempleteFixture'
-            clas = fixturePath.split('.')[-1]
+            _CLASSNAME = fixturePath.split('.')[-1]
             i = fixturePath.split('$')
             if len(i) == 1:
                 exec 'import ' + fixturePath
                 # test class method
-                exec 'fixture = ' + fixturePath + '.' + clas + '()' 
+                exec 'fixture = ' + fixturePath + '.' + _CLASSNAME + '()' 
             else:
                 exec "import %s" % (i[0],)
                 exec "fixture = %s.%s()" % (i[0], i[1])
@@ -146,8 +146,8 @@ class ExcelColumnFixture(Report):
         self.title, rowpos = self.getTitle(rowpos, ncols)
         rowpos = self.processHeads(rowpos, ncols)
         #setup before test
-        if hasattr(self, 'runSetupFixture'):
-            self.runSetupFixture()
+        if hasattr(self, 'initSetupFixture') and self.initSetupFixture:
+            self.runInitSetupFixture()
         self.repstr = self.getReportHeader(self.curShName, needscrips=True)
         self.failrepstr = self.getReportHeader(self.curShName, needscrips=True)
         self.repstr += self.getReportTableHeader()

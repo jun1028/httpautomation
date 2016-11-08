@@ -40,10 +40,10 @@ class ActionFixture(Fixture):
         #how does this work in java ?
         #self.actor = eval(self.cells.more.text()+'()')
         path = self.cells.more.text()
-        clas = path.split('.')[-1]
+        _CLASSNAME = path.split('.')[-1]
         exec 'import ' + path
-        exec "ActionFixture.actor = " + path + "." + clas + "()"
-#        exec 'self.__class__.actor = '+path+'.'+clas+'()'
+        exec "ActionFixture.actor = " + path + "." + _CLASSNAME + "()"
+#        exec 'self.__class__.actor = '+path+'.'+_CLASSNAME+'()'
 
     #public void enter() throws Exception {
     def enter_(self):

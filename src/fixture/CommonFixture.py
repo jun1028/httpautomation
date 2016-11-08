@@ -55,10 +55,10 @@ class CommonFixture(object):
         if resp is dict and key in resp:
             self.preResultInfo[key] = resp[key]
         else:
-            self.preResultInfo[key] = self.getPatternResultStr(\
+            self.preResultInfo[key] = self.getPatternResultStrFromResp(\
                                                 value, resp)
     
-    def getPatternResultStr(self, pattern, resp):
+    def getPatternResultStrFromResp(self, pattern, resp):
         result = ''
         temp = re.findall(pattern, resp, re.IGNORECASE)
         if temp:
@@ -74,7 +74,7 @@ class CommonFixture(object):
             pass
         Log.debug('match re: ', restr)
         return restr
-
+    
     def savePreResultInfoByRe(self, result):
         pass
     
@@ -94,8 +94,7 @@ class CommonFixture(object):
         if hasattr(self, 'preResultInfo') and self.preResultInfo is dict:
             self.args.update(self.preResultInfo)
     
-    def getUrl(self):
-        #如果测试用例没有url列,或者为空，则用全局的值
+    def setUrl(self):
         if not hasattr(self, 'url') or not self.url:
             self.url = self.interface + self.function
         return self.url
@@ -121,10 +120,10 @@ class CommonFixture(object):
         if self.setupFixture:
             fixturePath = self.setupFixture[0]
             fixtureParams = self.setupFixture[1]
-            clas = fixturePath.split('.')[-1]
+            _CLASSNAME = fixturePath.split('.')[-1]
             try:
-                exec 'import ' + clas
-                exec 'fixture = ' + fixturePath + '.' + clas + '()' 
+                exec 'import ' + _CLASSNAME
+                exec 'fixture = ' + fixturePath + '.' + _CLASSNAME + '()' 
                 self.initBeforeTest = fixture.run(fixtureParams)
             except BaseException, e:
                 Log.error(e)

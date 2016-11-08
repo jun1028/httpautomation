@@ -42,7 +42,6 @@ def callbackfunc(blocknum, blocksize, totalsize):
 def download(url, filename):
     contentlen = 0
     try:
-        print url, filename
         print "downloading with urllib"
         filename, header = urllib.urlretrieve(url, filename, callbackfunc)
         contentlen = header.getheader('Content-Length')
@@ -53,8 +52,10 @@ def download(url, filename):
 
 class HttpClientUtil(object):
     
-    _clas = 'httputil.HttpClientUtil'
+    _CLASSNAME = 'httputil.HttpClientUtil'
+    
     headerinfo = ''
+    serResp = None
 
     def __init__(self):
         self.token = ''
@@ -96,6 +97,11 @@ class HttpClientUtil(object):
                 response = 'filepath is not exists:'
         else:
             print 'does not implement!'
+#        try:
+#            cookie = self.getCookie(response.info())
+#            self.setCookie(cookie)
+#        except:
+#            pass
         return response
 
     def httppost(self, url, args=None, content_type=None):
@@ -111,7 +117,7 @@ class HttpClientUtil(object):
 
     def get(self, url, args=None, content_type=None, headers=None):
         params = ''
-        Log.debug('start get' + self._clas)
+        Log.debug('start get' + self._CLASSNAME)
         if args and not isinstance(args, dict):
             args = self.strToDict(args)
         if args:
@@ -126,7 +132,7 @@ class HttpClientUtil(object):
             req.add_header('Content-Type', content_type)
         response = self.opener.open(req)
         self.response = response
-        Log.debug('start end' + self._clas)
+        Log.debug('start end' + self._CLASSNAME)
         return self.response
 
     def openUrl(self, url, args='', content_type=''):
@@ -268,6 +274,18 @@ class HttpClientUtil(object):
                 strData += ','
                 strData += temp
         return strData + '}'
+    
+    def setCookie(self, cookie):
+        self.cookie = cookie
+        
+    def getCookie(self, respInfo):
+        cookie = ''
+        try:
+            if respInfo and 'Set-Cookie' in respInfo:
+                cookie = respInfo['Set-Cookie']
+        except BaseException, e:
+            Log.error("get cookie value error", e)  
+        return cookie
 #test
 if __name__ == '__main__':
     client = HttpClientUtil()

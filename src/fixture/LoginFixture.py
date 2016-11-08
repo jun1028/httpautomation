@@ -13,7 +13,8 @@ class LoginFixture(object):
     '''
     classdocs
     '''
-  
+    _CLASSNAME = 'fixture.LoginFixture'
+    
     def __init__(self):
         '''
         Constructor
@@ -26,9 +27,11 @@ class LoginFixture(object):
     #@return type:dict key: "ut"
     #   sample     loginResult = {"ut":ut}
     def run(self, params, returnparam=None):
+        Log.debug('start run: ' + self._CLASSNAME)
         result = {}
         tokenvalue = ''
         cookie = ''
+        Log.debug('login params: ', params)
         if type(params) == str or type(params) == unicode:
             params = strToDict(params)
             if 'url' in params:
@@ -51,6 +54,7 @@ class LoginFixture(object):
                 tokenvalue = self.getToken(respdata, returnparam)
                 if tokenvalue:
                     result['token'] = tokenvalue
+        Log.debug('end run: ' + self._CLASSNAME)
         return result
     
     def getCookie(self, info):

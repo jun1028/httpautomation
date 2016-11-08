@@ -81,13 +81,13 @@ class Fixture:
                 try:
                     path = heading.text()
                     #path = re.sub(r'^fit\.','',path) #try to cure the fits of madness
-                    clas = path.split('.')[-1]
+                    _CLASSNAME = path.split('.')[-1]
                     # fix for illegal Java trick in AllFiles. Frankly, I like it!
                     i = path.split('$')
                     if len(i) == 1:
                         exec 'import '+path
                         #test class method
-                        exec 'fixture = '+path+'.'+clas+'()' 
+                        exec 'fixture = '+path+'.'+_CLASSNAME+'()' 
                     else:
                         exec "import %s" % (i[0],)
                         exec "fixture = %s.%s()" % (i[0], i[1])

@@ -1,1 +1,1 @@
-{"error":"HTTP Error 404: Not Found"}
+{"error":"<urlopen error [Errno 10054] >"}

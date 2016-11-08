@@ -23,7 +23,13 @@ def strToDict(data):
         return result
     
 def strToJson(data):
-    return json.loads(data)
+    try:
+        datajson = json.loads(data)
+    except BaseException, e:
+        Log.debug("strToJson",  e)
+        print e
+        datajson = {}
+    return datajson
 
 def dictToStr(data):
     return str(data)

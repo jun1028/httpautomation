@@ -1,5 +1,6 @@
 eclipse.preferences.version=1
 encoding//src/apifixture/HttpApiFixture.py=UTF-8
+encoding//src/apifixture/MultipleHttpFixture.py=UTF-8
 encoding//src/apifixture/TempleteFixture.py=UTF-8
 encoding//src/apifixture/httpconf.py=UTF-8
 encoding//src/cfg/XMLConfiguration.py=UTF-8

@@ -45,7 +45,7 @@
 	<target name="sendmail"  depends="make_data_zip">
 		<echo>send mail</echo>
 		<tstamp />
-		<mail messageMimeType="text/html" message="hello, water, pls check your mail" tolist="jun_1910310@163.com,zzj@moojnn.com" mailhost="smtp.163.com" ssl="true" mailport="465" subject="automation test" 	from="jun_1910310@163.com" user="jun_1910310@163.com" password="ufo*911">
+		<mail messageMimeType="text/html" message="hello, water, pls check your mail" tolist="jun_1910310@163.com,zzj@moojnn.com,,xuh@moojnn.com" mailhost="smtp.163.com" ssl="true" mailport="465" subject="automation test" 	from="jun_1910310@163.com" user="jun_1910310@163.com" password="ufo*911">
 		<fileset dir="${out}">
 			<include name="summary.html" />
 		</fileset>
